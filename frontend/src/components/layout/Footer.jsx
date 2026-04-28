@@ -69,8 +69,21 @@ const ColHeading = ({ children }) => (
   </h4>
 );
 
+import { useSettings } from "../../context/SettingsContext";
+
 const Footer = () => {
+  const { settings } = useSettings();
   const year = new Date().getFullYear();
+
+  const SOCIALS = [
+    { icon: <RiInstagramLine />, href: settings?.socialLinks?.instagram || "https://instagram.com", label: "Instagram" },
+    { icon: <RiFacebookBoxLine />, href: settings?.socialLinks?.facebook || "https://facebook.com", label: "Facebook" },
+    { icon: <RiLinkedinBoxLine />, href: settings?.socialLinks?.linkedin || "https://linkedin.com", label: "LinkedIn" },
+    { icon: <RiPinterestLine />, href: settings?.socialLinks?.pinterest || "https://pinterest.com", label: "Pinterest" },
+  ];
+
+  const logoSrc = settings?.logo || "/logo.png";
+  const siteName = settings?.siteName || "UKS Interiors";
 
   return (
     <>
@@ -144,11 +157,10 @@ const Footer = () => {
             {/* Brand */}
             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
               <Link to="/">
-                <img src="/logo.png" alt="UKS Interiors" style={{ height: "32px", width: "auto", objectFit: "contain", opacity: 0.85 }} />
+                <img src={logoSrc} alt={siteName} style={{ height: "32px", width: "auto", objectFit: "contain", opacity: 0.85 }} />
               </Link>
               <p style={{ fontSize: "0.875rem", fontWeight: 300, color: W, lineHeight: 1.85, maxWidth: "260px" }}>
-                Award-winning European luxury interior design. Bespoke kitchens,
-                wardrobes, and furniture crafted with precision and elegance.
+                {settings?.seo?.metaDescription || "Award-winning European luxury interior design. Bespoke kitchens, wardrobes, and furniture crafted with precision and elegance."}
               </p>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 {SOCIALS.map((s) => (
@@ -200,19 +212,27 @@ const Footer = () => {
                 <li style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
                   <RiMapPinLine style={{ color: "#c4a064", fontSize: "0.95rem", marginTop: "3px", flexShrink: 0 }} />
                   <span style={{ fontSize: "0.875rem", fontWeight: 300, color: W, lineHeight: 1.75 }}>
-                    
-                        32 Victoria Road<br/>
-                        Ruislip, England HA4 0AB
+                    {settings?.address ? (
+                      settings.address.split(", ").map((line, i) => (
+                        <span key={i}>{line}{i < settings.address.split(", ").length - 1 && <br/>}</span>
+                      ))
+                    ) : (
+                      <>32 Victoria Road<br/>Ruislip, England HA4 0AB</>
+                    )}
                   </span>
                 </li>
-                <li style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <RiPhoneLine style={{ color: "#c4a064", fontSize: "0.95rem", flexShrink: 0 }} />
-                  <a href="tel:+441234567890" className="contact-link">+44 01895 347277</a>
-                </li>
-                <li style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <RiMailLine style={{ color: "#c4a064", fontSize: "0.95rem", flexShrink: 0 }} />
-                  <a href="mailto:sales@uks-interiors.com" className="contact-link">sales@uks-interiors.com</a>
-                </li>
+                {settings?.phone && (
+                  <li style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <RiPhoneLine style={{ color: "#c4a064", fontSize: "0.95rem", flexShrink: 0 }} />
+                    <a href={`tel:${settings.phone}`} className="contact-link">{settings.phone}</a>
+                  </li>
+                )}
+                {settings?.contactEmail && (
+                  <li style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <RiMailLine style={{ color: "#c4a064", fontSize: "0.95rem", flexShrink: 0 }} />
+                    <a href={`mailto:${settings.contactEmail}`} className="contact-link">{settings.contactEmail}</a>
+                  </li>
+                )}
               </ul>
 
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
@@ -234,7 +254,7 @@ const Footer = () => {
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "1.25rem clamp(1.5rem,5vw,5rem)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.5rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 300, color: W }}>
-              © {year} UKS Interiors. All rights reserved.
+              © {year} {siteName}. All rights reserved.
             </p>
             <p style={{ fontSize: "0.75rem", fontWeight: 300, color: W, fontStyle: "italic" }}>
               Crafted with precision & elegance

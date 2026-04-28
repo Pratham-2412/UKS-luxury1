@@ -5,6 +5,7 @@ import { BrowserRouter, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { SettingsProvider } from "./context/SettingsContext";
 import AppRouter from "./router/AppRouter";
 import Cursor from "./components/common/Cursor";
 import useScrollProgress from "./hooks/useScrollProgress";
@@ -63,11 +64,13 @@ const AppInner = () => {
 const App = () => {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <CartProvider>
-          <AppInner />
-        </CartProvider>
-      </AuthProvider>
+      <SettingsProvider>
+        <AuthProvider>
+          <CartProvider>
+            <AppInner />
+          </CartProvider>
+        </AuthProvider>
+      </SettingsProvider>
     </BrowserRouter>
   );
 };

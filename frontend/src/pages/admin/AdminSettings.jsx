@@ -6,10 +6,8 @@ import toast from "react-hot-toast";
 import { RiSaveLine } from "react-icons/ri";
 
 const EMPTY = {
-  businessName: "", tagline: "", email: "", phone: "",
-  logo: "",
-  address: "", city: "", postcode: "", country: "",
-  instagram: "", facebook: "", pinterest: "", linkedin: "",
+  siteName: "", logo: "", contactEmail: "", phone: "", address: "",
+  instagram: "", facebook: "", linkedin: "", youtube: "", pinterest: "",
   metaTitle: "", metaDescription: "",
 };
 
@@ -21,23 +19,20 @@ const AdminSettings = () => {
   useEffect(() => {
     getSettings()
       .then((res) => {
-        const d = res.data.settings || res.data.data || {};
+        const d = res.data.data || res.data.settings || {};
         setForm({
-          businessName:    d.businessName    || "",
-          tagline:         d.tagline         || "",
-          email:           d.email           || d.contact?.email || "",
-          phone:           d.phone           || d.contact?.phone || "",
-          address:         d.address         || d.contact?.address || "",
-          city:            d.city            || "",
-          postcode:        d.postcode        || "",
-          country:         d.country         || "",
-          instagram:       d.instagram       || d.social?.instagram || "",
-          facebook:        d.facebook        || d.social?.facebook  || "",
-          pinterest:       d.pinterest       || d.social?.pinterest || "",
-          linkedin:        d.linkedin        || d.social?.linkedin  || "",
+          siteName:        d.siteName        || "",
           logo:            d.logo            || "",
-          metaTitle:       d.metaTitle       || d.seo?.title        || "",
-          metaDescription: d.metaDescription || d.seo?.description  || "",
+          contactEmail:    d.contactEmail    || "",
+          phone:           d.phone           || "",
+          address:         d.address         || "",
+          instagram:       d.socialLinks?.instagram || "",
+          facebook:        d.socialLinks?.facebook  || "",
+          linkedin:        d.socialLinks?.linkedin  || "",
+          youtube:         d.socialLinks?.youtube   || "",
+          pinterest:       d.socialLinks?.pinterest || "",
+          metaTitle:       d.seo?.metaTitle         || "",
+          metaDescription: d.seo?.metaDescription   || "",
         });
       })
       .catch(() => {})
@@ -52,7 +47,26 @@ const AdminSettings = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await updateSettings(form);
+      // Transform flat form state to nested model structure
+      const payload = {
+        siteName: form.siteName,
+        logo: form.logo,
+        contactEmail: form.contactEmail,
+        phone: form.phone,
+        address: form.address,
+        socialLinks: {
+          instagram: form.instagram,
+          facebook: form.facebook,
+          linkedin: form.linkedin,
+          youtube: form.youtube,
+          pinterest: form.pinterest,
+        },
+        seo: {
+          metaTitle: form.metaTitle,
+          metaDescription: form.metaDescription,
+        },
+      };
+      await updateSettings(payload);
       toast.success("Settings saved");
     } catch (err) {
       toast.error(err.response?.data?.message || "Save failed");
@@ -93,43 +107,39 @@ const AdminSettings = () => {
       <Section title="Business Information">
         <div style={S.row}>
           <div style={S.field}>
-            <label style={S.label}>Business Name</label>
-            <input name="businessName" value={form.businessName} onChange={handleChange} placeholder="UKS Interiors" style={S.input} />
+            <label style={S.label}>Site Name</label>
+            <input name="siteName" value={form.siteName} onChange={handleChange} placeholder="UKS Interiors" style={S.input} />
           </div>
           <div style={S.field}>
-            <label style={S.label}>Tagline</label>
-            <input name="tagline" value={form.tagline} onChange={handleChange} placeholder="Award-winning European luxury design" style={S.input} />
-          </div>
-        </div>
-        <div style={S.field}>
-          <label style={S.label}>Logo URL</label>
-          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-            <input 
-               name="logo" 
-               value={form.logo} 
-               onChange={handleChange} 
-               placeholder="/logo.png" 
-               style={{ ...S.input, flex: 1 }} 
-            />
-            {form.logo && (
-              <img 
-                src={form.logo} 
-                alt="Logo Preview" 
-                style={{ height: "30px", border: "1px solid rgba(255,255,255,0.1)", padding: "2px", background: "#000" }} 
+            <label style={S.label}>Logo URL</label>
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <input 
+                 name="logo" 
+                 value={form.logo} 
+                 onChange={handleChange} 
+                 placeholder="/logo.png" 
+                 style={{ ...S.input, flex: 1 }} 
               />
-            )}
+              {form.logo && (
+                <img 
+                  src={form.logo} 
+                  alt="Logo Preview" 
+                  style={{ height: "30px", border: "1px solid rgba(255,255,255,0.1)", padding: "2px", background: "#000" }} 
+                />
+              )}
+            </div>
+            <p style={{ fontSize: "0.65rem", color: "#5a5550", marginTop: "0.25rem" }}>
+              Use "/logo.png" for the local logo or paste a Cloudinary URL.
+            </p>
           </div>
-          <p style={{ fontSize: "0.65rem", color: "#5a5550", marginTop: "0.25rem" }}>
-            Use "/logo.png" for the local logo or paste a Cloudinary URL.
-          </p>
         </div>
       </Section>
 
       <Section title="Contact Information">
         <div style={S.row}>
           <div style={S.field}>
-            <label style={S.label}>Email</label>
-            <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="info@uksinteriors.com" style={S.input} />
+            <label style={S.label}>Contact Email</label>
+            <input name="contactEmail" type="email" value={form.contactEmail} onChange={handleChange} placeholder="info@uksinteriors.com" style={S.input} />
           </div>
           <div style={S.field}>
             <label style={S.label}>Phone</label>
@@ -138,17 +148,7 @@ const AdminSettings = () => {
         </div>
         <div style={S.field}>
           <label style={S.label}>Address</label>
-          <input name="address" value={form.address} onChange={handleChange} placeholder="123 Design Quarter" style={S.input} />
-        </div>
-        <div style={S.row}>
-          <div style={S.field}>
-            <label style={S.label}>City</label>
-            <input name="city" value={form.city} onChange={handleChange} placeholder="London" style={S.input} />
-          </div>
-          <div style={S.field}>
-            <label style={S.label}>Postcode</label>
-            <input name="postcode" value={form.postcode} onChange={handleChange} placeholder="W1K 4AB" style={S.input} />
-          </div>
+          <input name="address" value={form.address} onChange={handleChange} placeholder="123 Design Quarter, London, W1K 4AB" style={S.input} />
         </div>
       </Section>
 
@@ -165,12 +165,16 @@ const AdminSettings = () => {
         </div>
         <div style={S.row}>
           <div style={S.field}>
-            <label style={S.label}>Pinterest URL</label>
-            <input name="pinterest" value={form.pinterest} onChange={handleChange} placeholder="https://pinterest.com/uksinteriors" style={S.input} />
-          </div>
-          <div style={S.field}>
             <label style={S.label}>LinkedIn URL</label>
             <input name="linkedin" value={form.linkedin} onChange={handleChange} placeholder="https://linkedin.com/company/uksinteriors" style={S.input} />
+          </div>
+          <div style={S.field}>
+            <label style={S.label}>YouTube URL</label>
+            <input name="youtube" value={form.youtube} onChange={handleChange} placeholder="https://youtube.com/c/uksinteriors" style={S.input} />
+          </div>
+          <div style={S.field}>
+            <label style={S.label}>Pinterest URL</label>
+            <input name="pinterest" value={form.pinterest} onChange={handleChange} placeholder="https://pinterest.com/uksinteriors" style={S.input} />
           </div>
         </div>
       </Section>

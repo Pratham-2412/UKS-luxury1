@@ -1,9 +1,6 @@
-// src/components/sections/Hero.jsx
-import { useEffect, useRef, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
-import { RiArrowDownLine, RiPlayCircleLine } from "react-icons/ri";
+import { getHeros } from "../../api/adminApi";
 
-const SLIDES = [
+const DEFAULT_SLIDES = [
   {
     image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=80",
     eyebrow: "Bespoke Kitchens",
@@ -16,40 +13,70 @@ const SLIDES = [
     heading: ["Storage Refined", "To Perfection"],
     sub: "Bespoke wardrobe solutions that blend seamless function with timeless luxury.",
   },
-  {
-    image: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1920&q=80",
-    eyebrow: "Living Spaces",
-    heading: ["Interiors That", "Tell Your Story"],
-    sub: "Every space a canvas. Every detail intentional. Every home, truly yours.",
-  },
 ];
 
 const Hero = () => {
+  const [slides, setSlides]       = useState([]);
   const [current, setCurrent]     = useState(0);
   const [animating, setAnimating] = useState(false);
   const [visible, setVisible]     = useState(false);
+  const [loading, setLoading]     = useState(true);
   const intervalRef               = useRef(null);
 
+  useEffect(() => {
+    getHeros()
+      .then((res) => {
+        const items = res.data.data || res.data.heroSections || [];
+        if (items.length > 0) {
+          const mapped = items.map(item => ({
+            image: item.image,
+            eyebrow: item.eyebrow,
+            heading: item.heading.includes("|") ? item.heading.split("|") : [item.heading, ""],
+            sub: item.subheading,
+            ctaLabel: item.ctaLabel,
+            ctaLink: item.ctaLink
+          }));
+          setSlides(mapped);
+        } else {
+          setSlides(DEFAULT_SLIDES);
+        }
+      })
+      .catch(() => setSlides(DEFAULT_SLIDES))
+      .finally(() => setLoading(false));
+  }, []);
+
   const goTo = useCallback((index) => {
-    if (animating || index === current) return;
+    if (animating || index === current || slides.length === 0) return;
     setAnimating(true);
     setVisible(false);
     setTimeout(() => { setCurrent(index); setAnimating(false); }, 800);
-  }, [animating, current]);
+  }, [animating, current, slides.length]);
 
-  const next = useCallback(() => goTo((current + 1) % SLIDES.length), [current, goTo]);
+  const next = useCallback(() => {
+    if (slides.length > 0) {
+      goTo((current + 1) % slides.length);
+    }
+  }, [current, goTo, slides.length]);
 
   useEffect(() => {
-    intervalRef.current = setInterval(next, 6000);
-    return () => clearInterval(intervalRef.current);
-  }, [next]);
+    if (slides.length > 1) {
+      intervalRef.current = setInterval(next, 6000);
+      return () => clearInterval(intervalRef.current);
+    }
+  }, [next, slides.length]);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 250);
     return () => clearTimeout(t);
   }, [current]);
 
-  const slide = SLIDES[current];
+  if (loading || slides.length === 0) return (
+    <section className="relative h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="w-12 h-[1px] bg-[#c4a064] animate-pulse" />
+    </section>
+  );
+
+  const slide = slides[current];
 
   return (
     <>
@@ -134,7 +161,7 @@ const Hero = () => {
 
         {/* Slide backgrounds */}
         <div className="absolute inset-0">
-          {SLIDES.map((s, i) => (
+          {slides.map((s, i) => (
             <div
               key={i}
               className={i === current ? "hero-img-active" : ""}
@@ -181,11 +208,13 @@ const Hero = () => {
                 </div>
 
                 {/* H1 line 2 */}
-                <div className="hero-line-3 mb-7 overflow-hidden">
-                  <h1 className="font-serif font-light italic leading-[1.05]" style={{ fontSize: "clamp(3.2rem,7.5vw,6.5rem)", color: "#e8d5a3" }}>
-                    {slide.heading[1]}
-                  </h1>
-                </div>
+                {slide.heading[1] && (
+                  <div className="hero-line-3 mb-7 overflow-hidden">
+                    <h1 className="font-serif font-light italic leading-[1.05]" style={{ fontSize: "clamp(3.2rem,7.5vw,6.5rem)", color: "#e8d5a3" }}>
+                      {slide.heading[1]}
+                    </h1>
+                  </div>
+                )}
 
                 {/* Subtext */}
                 <p className="hero-line-4 font-sans mb-10 max-w-[460px] font-light leading-[1.9] text-white/55" style={{ fontSize: "clamp(0.85rem,1.4vw,0.95rem)", letterSpacing: "0.02em" }}>
@@ -195,11 +224,11 @@ const Hero = () => {
                 {/* CTA buttons */}
                 <div className="hero-line-5 hero-actions flex flex-wrap items-center gap-3">
                   <Link
-                    to="/collections"
+                    to={slide.ctaLink || "/collections"}
                     className="hero-btn-gold font-sans inline-flex items-center gap-2 rounded-[2px] text-[0.65rem] font-medium uppercase tracking-[0.2em] transition-all duration-300"
                     style={{ padding: "0.9rem 2.25rem", background: "linear-gradient(135deg,#c4a064,#a07840)", color: "#0a0a0a" }}
                   >
-                    Explore Collections
+                    {slide.ctaLabel || "Explore Collections"}
                   </Link>
                   <Link
                     to="/projects"
@@ -237,13 +266,13 @@ const Hero = () => {
                 <span key={current} className="progress-run absolute left-0 top-0 h-full" style={{ background: "linear-gradient(to right,#c4a064,#e8c87a)" }} />
               </div>
               <span className="font-sans text-[0.62rem] text-white/25">
-                {String(SLIDES.length).padStart(2, "0")}
+                {String(slides.length).padStart(2, "0")}
               </span>
             </div>
 
             {/* Dot navigation */}
             <div className="flex items-center gap-2">
-              {SLIDES.map((_, i) => (
+              {slides.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => goTo(i)}

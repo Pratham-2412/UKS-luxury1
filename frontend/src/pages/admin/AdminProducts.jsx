@@ -177,20 +177,41 @@ const AdminProducts = () => {
     }
     setSaving(true);
     try {
+      // 1. Handle "pseudo" categories (default names that aren't in DB yet)
+      let categoryId = form.category;
+      if (categoryId && !/^[0-9a-fA-F]{24}$/.test(categoryId)) {
+        try {
+          const res = await createCategory({ name: categoryId });
+          const created = res.data?.category ?? res.data?.data ?? res.data;
+          categoryId = created?._id ?? created?.id;
+          // Refresh categories list to include the new one
+          await loadCategories();
+        } catch (catErr) {
+          console.error("Auto-category creation failed:", catErr);
+          // If it failed because it already exists (but for some reason wasn't in our list as an ID), 
+          // we might want to try to find it, but for now just inform user.
+          toast.error(`Failed to initialize category "${categoryId}"`);
+          setSaving(false);
+          return;
+        }
+      }
+
       let specs = undefined;
       if (form.specifications.trim()) {
         try { specs = JSON.parse(form.specifications); }
         catch { toast.error("Specifications must be valid JSON"); setSaving(false); return; }
       }
+
       const payload = {
         ...form,
-        category:  form.category || null,
+        category:  categoryId || null,
         price:     Number(form.price),
         salePrice: form.salePrice ? Number(form.salePrice) : undefined,
         stock:     Number(form.stock) || 0,
         gallery:   galleryInput.split("\n").map((s) => s.trim()).filter(Boolean),
         specifications: specs,
       };
+
       if (editing) {
         await updateProduct(editing._id, payload);
         toast.success("Product updated");
@@ -223,6 +244,40 @@ const AdminProducts = () => {
         </button>
       }
     >
+      <div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
+        <input
+          placeholder="Search products..."
+          onChange={(e) => {
+            const val = e.target.value.toLowerCase();
+            if (!val) { load(); return; }
+            setItems(prev => prev.filter(item => 
+              item.name.toLowerCase().includes(val) || 
+              item.slug.toLowerCase().includes(val)
+            ));
+          }}
+          style={{ ...S.input, width: "300px" }}
+        />
+        <select 
+          onChange={async (e) => {
+            const catId = e.target.value;
+            setLoading(true);
+            try {
+              // Passing query params to API
+              const res = await getAdminProducts(catId ? { category: catId } : {});
+              const raw = res.data.products ?? res.data.data ?? res.data;
+              setItems(Array.isArray(raw) ? raw : []);
+            } catch { toast.error("Failed to filter"); }
+            finally { setLoading(false); }
+          }}
+          style={{ ...S.select, width: "200px" }}
+        >
+          <option value="">All Categories</option>
+          {categories.map(c => (
+            <option key={c._id} value={c._id}>{c.name}</option>
+          ))}
+        </select>
+      </div>
+
       <div style={{ ...S.card, padding: 0, overflow: "hidden" }}>
         <div style={{ overflowX: "auto" }}>
           <table style={S.table}>

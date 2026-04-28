@@ -28,19 +28,27 @@ const NAV_LINKS = [
   { label: "Shop",       path: "/shop" },
 ];
 
-const Logo = () => (
-  <img
-    src="/logo.png"
-    alt="UKS Interiors"
-    className="h-8 w-auto object-contain"
-    onError={(e) => {
-      e.target.onerror = null;
-      e.target.style.display = "none";
-      e.target.parentNode.innerHTML =
-        '<span style="font-family:\'Cormorant Garamond\',serif;font-size:1.1rem;font-weight:400;letter-spacing:0.18em;color:#f0ece4;">UKS INTERIORS</span>';
-    }}
-  />
-);
+import { useSettings } from "../../context/SettingsContext";
+
+const Logo = () => {
+  const { settings } = useSettings();
+  const logoSrc = settings?.logo || "/logo.png";
+  const siteName = settings?.siteName || "UKS INTERIORS";
+
+  return (
+    <img
+      src={logoSrc}
+      alt={siteName}
+      className="h-8 w-auto object-contain"
+      onError={(e) => {
+        e.target.onerror = null;
+        e.target.style.display = "none";
+        e.target.parentNode.innerHTML =
+          `<span style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;letter-spacing:0.18em;color:#f0ece4;">${siteName.toUpperCase()}</span>`;
+      }}
+    />
+  );
+};
 
 const Navbar = () => {
   const [scrolled, setScrolled]             = useState(false);
@@ -51,6 +59,7 @@ const Navbar = () => {
 
   const dropdownRef = useRef(null);
   const { cartCount } = useCart();
+  const { settings } = useSettings();
   const { pathname } = useLocation();
   const isHome = pathname === "/";
 
@@ -389,11 +398,11 @@ const Navbar = () => {
           {/* Drawer footer */}
           <div style={{ marginTop: "auto", padding: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.06)", flexShrink: 0 }}>
             <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.25)", lineHeight: 1.8, marginBottom: "1rem", fontFamily: "'Jost', sans-serif", fontWeight: 300 }}>
-              Award-winning European luxury interior design.
+              {settings?.seo?.metaDescription || "Award-winning European luxury interior design."}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <a href="tel:+441234567890" style={{ fontSize: "0.85rem", color: "#c4a064", fontFamily: "'Jost', sans-serif", transition: "color 0.15s" }}>+44 123 456 7890</a>
-              <a href="mailto:info@uksinteriors.com" style={{ fontSize: "0.85rem", color: "#c4a064", fontFamily: "'Jost', sans-serif", transition: "color 0.15s" }}>info@uksinteriors.com</a>
+              {settings?.phone && <a href={`tel:${settings.phone}`} style={{ fontSize: "0.85rem", color: "#c4a064", fontFamily: "'Jost', sans-serif", transition: "color 0.15s" }}>{settings.phone}</a>}
+              {settings?.contactEmail && <a href={`mailto:${settings.contactEmail}`} style={{ fontSize: "0.85rem", color: "#c4a064", fontFamily: "'Jost', sans-serif", transition: "color 0.15s" }}>{settings.contactEmail}</a>}
             </div>
           </div>
 

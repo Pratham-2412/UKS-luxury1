@@ -6,6 +6,7 @@ const socialLinksSchema = new mongoose.Schema(
     facebook: { type: String, default: "" },
     linkedin: { type: String, default: "" },
     youtube: { type: String, default: "" },
+    pinterest: { type: String, default: "" },
   },
   { _id: false }
 );

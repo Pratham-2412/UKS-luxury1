@@ -1,15 +1,21 @@
-// src/components/layout/Layout.jsx
-import { Outlet, useLocation } from "react-router-dom";
-import { useEffect } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import { useSettings } from "../../context/SettingsContext";
 
 const Layout = () => {
   const { pathname } = useLocation();
+  const { settings } = useSettings();
   
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [pathname]);
+
+    // Update document title and meta description from settings
+    if (settings?.seo) {
+      document.title = settings.seo.metaTitle || "UKS Luxury Interiors";
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute("content", settings.seo.metaDescription || "");
+      }
+    }
+  }, [pathname, settings]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0a0a]">

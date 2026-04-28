@@ -5,7 +5,7 @@ const getHeroSections = async (req, res, next) => {
     const query = {};
     if (!req.user) query.isActive = true;
 
-    const items = await HeroSection.find(query).sort({ sortOrder: 1, createdAt: -1 });
+    const items = await HeroSection.find(query).sort({ order: 1, createdAt: -1 });
 
     res.status(200).json({
       success: true,
