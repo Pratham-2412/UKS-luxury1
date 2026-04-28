@@ -1,3 +1,6 @@
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { RiArrowDownLine, RiPlayCircleLine } from "react-icons/ri";
 import { getHeros } from "../../api/adminApi";
 
 const DEFAULT_SLIDES = [
