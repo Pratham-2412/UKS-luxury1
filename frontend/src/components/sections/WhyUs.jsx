@@ -78,7 +78,7 @@ const PillarCard = ({ pillar, index, allInView }) => {
       {/* Desc */}
       <p
         className="font-sans font-light leading-[1.8] transition-colors duration-300"
-        style={{ fontSize: "0.875rem", color: hov ? "#7a7268" : "#5a5550" }}
+        style={{ fontSize: "0.9rem", color: hov ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.42)" }}
       >
         {pillar.desc}
       </p>

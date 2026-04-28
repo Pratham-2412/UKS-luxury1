@@ -104,7 +104,7 @@ const CollectionCard = ({ item, index }) => {
         {item.shortDescription && (
           <p
             className="font-sans font-light leading-[1.65] line-clamp-2 transition-colors duration-300"
-            style={{ fontSize: "0.78rem", color: "#5a5550" }}
+            style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.45)" }}
           >
             {item.shortDescription}
           </p>

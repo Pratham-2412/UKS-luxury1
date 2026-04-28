@@ -91,17 +91,17 @@ const FeaturedProjects = ({ projects }) => {
                         </span>
                       )}
                       {main.year && (
-                        <span className="font-sans text-[0.58rem] text-white/35">{main.year}</span>
+                        <span className="font-sans text-[0.58rem] text-white/50">{main.year}</span>
                       )}
                     </div>
                     <h3 className="font-serif font-light text-white leading-[1.12]" style={{ fontSize: "clamp(1.6rem,3.5vw,2.6rem)" }}>
                       {main.title}
                     </h3>
-                    <p className="font-sans font-light leading-[1.75] text-white/55 line-clamp-2" style={{ fontSize: "0.84rem" }}>
+                    <p className="font-sans font-light leading-[1.75] text-white/65 line-clamp-2" style={{ fontSize: "0.88rem" }}>
                       {main.shortDescription}
                     </p>
                     {main.location && (
-                      <div className="font-sans flex items-center gap-1.5 text-[0.62rem] text-white/35">
+                      <div className="font-sans flex items-center gap-1.5 text-[0.62rem] text-white/45">
                         <RiMapPinLine className="text-[#c4a064] flex-shrink-0" /> {main.location}
                       </div>
                     )}
@@ -171,7 +171,7 @@ const FeaturedProjects = ({ projects }) => {
                       </span>
                     )}
                     {p.year && (
-                      <span className="font-sans text-[0.55rem] text-[#5a5550]">· {p.year}</span>
+                      <span className="font-sans text-[0.55rem] text-white/40">· {p.year}</span>
                     )}
                   </div>
                   <h4
@@ -181,7 +181,7 @@ const FeaturedProjects = ({ projects }) => {
                     {p.title}
                   </h4>
                   {p.location && (
-                    <div className="font-sans flex items-center gap-1.5 text-[0.6rem] text-[#5a5550]">
+                    <div className="font-sans flex items-center gap-1.5 text-[0.6rem] text-white/40">
                       <RiMapPinLine className="text-[#c4a064] flex-shrink-0" /> {p.location}
                     </div>
                   )}

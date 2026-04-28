@@ -66,7 +66,7 @@ const TestimonialCard = ({ t, index, inView }) => (
       </div>
       <div className="flex flex-col gap-0.5">
         <p className="font-sans text-[0.875rem] font-normal text-[#f0ece4]">{t.name}</p>
-        <p className="font-sans text-[0.7rem] font-light tracking-[0.06em] text-[#5a5550]">{t.role || t.location}</p>
+        <p className="font-sans text-[0.7rem] font-light tracking-[0.06em] text-white/40">{t.role || t.location}</p>
       </div>
     </div>
   </div>

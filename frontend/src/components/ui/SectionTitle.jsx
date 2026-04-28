@@ -20,7 +20,7 @@ const SectionTitle = ({ eyebrow, title, subtitle, align = "left", light = false 
         <h2
           className="font-serif font-light leading-[1.15]"
           style={{
-            fontSize: "clamp(1.8rem,3.5vw,2.8rem)",
+            fontSize: "clamp(2rem,4vw,3rem)",
             color: light ? "#ffffff" : "#f0ece4",
           }}
         >
@@ -32,10 +32,10 @@ const SectionTitle = ({ eyebrow, title, subtitle, align = "left", light = false 
         <p
           className="font-sans font-light leading-[1.8]"
           style={{
-            fontSize: "0.88rem",
-            maxWidth: isCenter ? "520px" : "480px",
-            color: light ? "rgba(255,255,255,0.60)" : "#5a5550",
-            letterSpacing: "0.01em",
+            fontSize: "0.95rem",
+            maxWidth: isCenter ? "540px" : "500px",
+            color: light ? "rgba(255,255,255,0.65)" : "rgba(255,255,255,0.50)",
+            letterSpacing: "0.015em",
             textAlign: isCenter ? "center" : "left",
           }}
         >
