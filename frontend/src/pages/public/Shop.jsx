@@ -109,10 +109,10 @@ const Shop = () => {
         <div className="absolute bottom-0 left-0 right-0 max-w-[1400px] mx-auto px-[clamp(1.5rem,5vw,5rem)] pb-12 sm:pb-16">
           <span className="flex items-center gap-3 text-[0.72rem] tracking-[0.28em] uppercase text-[#c4a064] mb-4 animate-fade-up" style={{ animationDelay: '0.1s' }}>
             <span className="block w-8 h-px bg-[#c4a064] opacity-50" />
-            Curated Collection
+            Curated Pieces
           </span>
           <h1 className="font-serif text-[clamp(2.5rem,6vw,5.5rem)] font-light text-white leading-[1.05] mb-4 animate-fade-up" style={{ animationDelay: '0.22s' }}>
-            Luxury Pieces <em className="italic text-[#e8d5a3]">Curated</em>
+            Luxury <em className="italic text-[#e8d5a3]">Essentials</em>
           </h1>
           <p className="text-[clamp(0.9rem,1.5vw,1.1rem)] text-white/80 font-light max-w-[500px] leading-[1.8] animate-fade-up" style={{ animationDelay: '0.38s' }}>
             European craftsmanship brought to your doorstep. Browse our

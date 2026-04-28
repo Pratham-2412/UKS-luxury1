@@ -85,15 +85,15 @@ const ProductCard = ({ product, index = 0 }) => {
         </h3>
 
         {product.description && (
-          <p className="text-[1rem] text-white/70 leading-relaxed font-light line-clamp-2 max-w-[90%]">
+          <p className="text-[0.95rem] text-white/60 leading-relaxed font-light line-clamp-2 max-w-[95%]">
             {product.description}
           </p>
         )}
 
-        <div className="flex items-center gap-4 mt-1">
+        <div className="flex items-center gap-4 mt-3">
            <div className="flex flex-col relative w-fit">
              <span className="text-[0.65rem] tracking-[0.2em] uppercase text-[#c4a064] font-medium pb-1">
-               View Product
+               Explore Piece
              </span>
              <div className="absolute bottom-0 left-0 w-0 h-px bg-[#c4a064] group-hover:w-full transition-all duration-500 ease-out" />
            </div>
@@ -101,9 +101,10 @@ const ProductCard = ({ product, index = 0 }) => {
            <button
              onClick={handleAdd}
              disabled={product.stock === 0}
-             className="ml-auto w-10 h-10 flex items-center justify-center border border-white/10 text-white/60 hover:text-[#c4a064] hover:border-[#c4a064]/40 transition-all duration-300 rounded-full cursor-pointer disabled:opacity-20"
+             title="Add to Cart"
+             className="ml-auto w-11 h-11 flex items-center justify-center border border-white/10 bg-white/5 text-white/60 hover:text-[#0a0a0a] hover:bg-[#c4a064] hover:border-[#c4a064] transition-all duration-300 rounded-full cursor-pointer disabled:opacity-20"
            >
-             <RiShoppingBagLine className="text-sm" />
+             <RiShoppingBagLine className="text-[1.1rem]" />
            </button>
         </div>
       </div>
