@@ -16,7 +16,13 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || origin.startsWith("http://localhost:") || origin === process.env.FRONTEND_URL) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -24,8 +30,8 @@ app.use(
 );
 
 app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"));
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
 
 // ─── Health Check Route ───────────────────────────────────────────────────────
@@ -53,6 +59,8 @@ const cartRoutes        = require("./routes/cart.routes");
 const orderRoutes       = require("./routes/order.routes");
 const paymentRoutes     = require("./routes/payment.routes");
 const uploadRoutes      = require("./routes/upload.routes");
+const subcategoryRoutes = require("./routes/subcategory.routes");
+const subcategoryItemRoutes = require("./routes/subcategoryItem.routes");
 
 app.use("/api/auth",          authRoutes);
 app.use("/api/hero-sections", heroRoutes);
@@ -68,6 +76,8 @@ app.use("/api/cart",          cartRoutes);
 app.use("/api/orders",        orderRoutes);
 app.use("/api/payments",      paymentRoutes);
 app.use("/api/upload",        uploadRoutes);
+app.use("/api/subcategories", subcategoryRoutes);
+app.use("/api/subcategory-items", subcategoryItemRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res, next) => {
@@ -85,6 +95,8 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
+
+server.timeout = 600000; // 10 minutes timeout for large zip uploads
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err) => {

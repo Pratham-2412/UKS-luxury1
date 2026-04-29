@@ -5,7 +5,7 @@ import { RiArrowRightLine } from "react-icons/ri";
 import SectionTitle from "../ui/SectionTitle";
 
 const FALLBACK = [
-  { _id: "1", title: "Bespoke Kitchens",  slug: "bespoke-kitchens",  thumbnail: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80", shortDescription: "German precision meets award-winning design." },
+  { _id: "1", title: "Bespoke Kitchens",  slug: "bespoke-kitchens",  thumbnail: "/bespoke-kitchen.jpg", shortDescription: "German precision meets award-winning design." },
   { _id: "2", title: "Living Rooms",      slug: "living-room",       thumbnail: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80", shortDescription: "Curated spaces for refined living." },
   { _id: "3", title: "Hinged Wardrobes",  slug: "hinged-wardrobes",  thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", shortDescription: "Timeless storage, flawlessly executed." },
   { _id: "4", title: "Walk In Closet",    slug: "walk-in-closet",    thumbnail: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&q=80", shortDescription: "Your personal dressing sanctuary." },
@@ -122,7 +122,20 @@ const CollectionCard = ({ item, index }) => {
 
 const FeaturedCollections = ({ collections }) => {
   const [secRef, secInView] = useSR(0.08);
-  const data = collections?.length > 0 ? collections : FALLBACK;
+
+  const rawData = collections?.length > 0 ? collections : FALLBACK;
+
+  // Always ensure Bespoke Kitchens is the first featured card with the direct path
+  const data = [
+    {
+      _id: "bespoke-kitchen-featured",
+      title: "Bespoke Kitchens",
+      slug: "bespoke-kitchens",
+      thumbnail: "/bespoke-kitchen.jpg",
+      shortDescription: "German precision meets award-winning design."
+    },
+    ...rawData.filter(c => c.slug !== "bespoke-kitchens").slice(0, 5)
+  ];
 
   return (
     <section className="relative overflow-hidden py-28" style={{ background: "#0a0a0a" }}>

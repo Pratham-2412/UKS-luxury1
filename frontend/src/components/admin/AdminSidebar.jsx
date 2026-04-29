@@ -24,6 +24,8 @@ const NAV = [
   { path: "/admin/hero", icon: <RiImageLine />, label: "Hero Sections" },
   { path: "/admin/categories", icon: <RiFileList3Line />, label: "Categories" },
   { path: "/admin/collections", icon: <RiFileListLine />, label: "Collections" },
+  { path: "/admin/subcategories", icon: <RiFileListLine />, label: "Subcategories" },
+  { path: "/admin/subcategory-items", icon: <RiFileListLine />, label: "Subcategory Items" },
   { path: "/admin/projects", icon: <RiProjectorLine />, label: "Projects" },
   { path: "/admin/products", icon: <RiShoppingBagLine />, label: "Products" },
   { path: "/admin/offers", icon: <RiPercentLine />, label: "Offers" },

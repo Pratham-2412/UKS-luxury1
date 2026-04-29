@@ -30,7 +30,22 @@ const Collections = () => {
       .finally(() => setLoading(false));
   }, [activeType]);
 
-  const data = collections;
+  // Inject a permanent Bespoke Kitchens card when "All" or "Kitchens" filter is active
+  // Using the same /bespoke-kitchen.jpg thumbnail as the home page
+  const data = (activeType === "" || activeType === "Kitchen")
+    ? [
+        {
+          _id: "bespoke-kitchen-hardcoded",
+          title: "Bespoke Kitchens",
+          slug: "bespoke-kitchens",
+          type: "Kitchen",
+          featured: true,
+          thumbnail: "/bespoke-kitchen.jpg",
+          shortDescription: "German precision meets award-winning design. Discover our premium partner brands."
+        },
+        ...collections.filter(c => c.slug !== "bespoke-kitchens")
+      ]
+    : collections;
 
   return (
     <>

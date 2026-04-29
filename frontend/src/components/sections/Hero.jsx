@@ -19,12 +19,12 @@ const DEFAULT_SLIDES = [
 ];
 
 const Hero = () => {
-  const [slides, setSlides]       = useState([]);
-  const [current, setCurrent]     = useState(0);
+  const [slides, setSlides] = useState([]);
+  const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
-  const [visible, setVisible]     = useState(false);
-  const [loading, setLoading]     = useState(true);
-  const intervalRef               = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     getHeros()
@@ -122,7 +122,7 @@ const Hero = () => {
         .scroll-bounce { animation: scrollBounce 2s ease-in-out infinite; }
         .progress-run  { animation: progressRun 6s linear forwards; }
         .hero-btn-gold:hover {
-          opacity: 0.85;
+          opacity: 1;
           transform: translateY(-1px);
           box-shadow: 0 8px 28px rgba(196,160,100,0.22);
         }
@@ -130,6 +130,9 @@ const Hero = () => {
           background: rgba(255,255,255,0.05);
           border-color: rgba(255,255,255,0.32);
           color: #fff;
+        }
+        .hero-title-shadow {
+           text-shadow: 0 2px 20px rgba(0,0,0,0.6);
         }
         @media(max-width:768px){
           .hero-stats-grid{ grid-template-columns:repeat(2,1fr) !important; }
@@ -179,66 +182,67 @@ const Hero = () => {
               }}
             />
           ))}
-          <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.50)" }} />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(105deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.38) 45%, rgba(0,0,0,0.08) 100%)" }} />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%)" }} />
+          
+          {/* Subtle gradient only on the left bottom to protect text readability */}
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 40%, transparent 100%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 35%, transparent 65%)" }} />
         </div>
 
         {/* Deco vertical lines */}
         <div className="hero-deco absolute top-0 z-[1]" style={{ left: "clamp(3rem,8vw,8rem)", height: "100%", width: "1px", background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.055) 20%, rgba(255,255,255,0.055) 80%, transparent)" }} />
         <div className="hero-deco absolute top-0 z-[1]" style={{ right: "clamp(3rem,8vw,8rem)", height: "100%", width: "1px", background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.055) 20%, rgba(255,255,255,0.055) 80%, transparent)" }} />
 
-        {/* ── Main content — pushed down by navbar height ── */}
-        <div className="relative z-[2] flex flex-1 items-center" style={{ paddingTop: "80px" }}>
+        {/* ── Main content — FORCE bottom left side using absolute positioning ── */}
+        <div className="absolute bottom-0 left-0 right-0 z-[10] w-full" style={{ paddingBottom: "clamp(6rem, 15vh, 10rem)" }}>
           <div className="mx-auto w-full max-w-[1400px]" style={{ padding: "0 clamp(1.5rem,5vw,5rem)" }}>
 
             {visible && (
-              <div className="max-w-[660px]" key={current}>
+              <div className="max-w-[850px]" key={current}>
 
                 {/* Eyebrow */}
                 <div className="hero-line-1 mb-6 flex items-center gap-3">
-                  <span className="eyebrow-line" />
-                  <span className="font-sans text-[0.62rem] font-medium uppercase tracking-[0.32em] text-[#c4a064]">
+                  <span className="eyebrow-line" style={{ width: "32px", height: "1px", background: "#c4a064" }} />
+                  <span className="font-sans text-[0.65rem] font-medium uppercase tracking-[0.35em] text-[#c4a064]">
                     {slide.eyebrow}
                   </span>
                 </div>
 
                 {/* H1 line 1 */}
                 <div className="hero-line-2 overflow-hidden">
-                  <h1 className="font-serif font-light leading-[1.0] text-white" style={{ fontSize: "clamp(3.2rem,7.5vw,6.5rem)" }}>
+                  <h1 className="hero-title-shadow font-serif font-light leading-[0.9] text-white" style={{ fontSize: "clamp(4.2rem,10vw,9.5rem)" }}>
                     {slide.heading[0]}
                   </h1>
                 </div>
 
                 {/* H1 line 2 */}
                 {slide.heading[1] && (
-                  <div className="hero-line-3 mb-7 overflow-hidden">
-                    <h1 className="font-serif font-light italic leading-[1.05]" style={{ fontSize: "clamp(3.2rem,7.5vw,6.5rem)", color: "#e8d5a3" }}>
+                  <div className="hero-line-3 mb-9 overflow-hidden">
+                    <h1 className="hero-title-shadow font-serif font-light italic leading-[0.95]" style={{ fontSize: "clamp(4.2rem,10vw,9.5rem)", color: "#e8d5a3" }}>
                       {slide.heading[1]}
                     </h1>
                   </div>
                 )}
 
                 {/* Subtext */}
-                <p className="hero-line-4 font-sans mb-10 max-w-[460px] font-light leading-[1.9] text-white/55" style={{ fontSize: "clamp(0.85rem,1.4vw,0.95rem)", letterSpacing: "0.02em" }}>
+                <p className="hero-line-4 font-sans mb-12 max-w-[580px] font-light leading-[1.9] text-white/95 hero-title-shadow" style={{ fontSize: "clamp(1rem,1.8vw,1.2rem)", letterSpacing: "0.02em" }}>
                   {slide.sub}
                 </p>
 
                 {/* CTA buttons */}
-                <div className="hero-line-5 hero-actions flex flex-wrap items-center gap-3">
+                <div className="hero-line-5 hero-actions flex flex-wrap items-center gap-4">
                   <Link
                     to={slide.ctaLink || "/collections"}
-                    className="hero-btn-gold font-sans inline-flex items-center gap-2 rounded-[2px] text-[0.65rem] font-medium uppercase tracking-[0.2em] transition-all duration-300"
-                    style={{ padding: "0.9rem 2.25rem", background: "linear-gradient(135deg,#c4a064,#a07840)", color: "#0a0a0a" }}
+                    className="hero-btn-gold font-sans inline-flex items-center gap-2 rounded-[2px] text-[0.7rem] font-medium uppercase tracking-[0.2em] transition-all duration-300"
+                    style={{ padding: "1.2rem 3.5rem", background: "linear-gradient(135deg,#c4a064,#a07840)", color: "#0a0a0a" }}
                   >
                     {slide.ctaLabel || "Explore Collections"}
                   </Link>
                   <Link
                     to="/projects"
-                    className="hero-btn-outline font-sans inline-flex items-center gap-2 rounded-[2px] border border-white/20 text-[0.65rem] font-light uppercase tracking-[0.2em] text-white/75 transition-all duration-300"
-                    style={{ padding: "0.9rem 1.75rem", backdropFilter: "blur(4px)" }}
+                    className="hero-btn-outline font-sans inline-flex items-center gap-2 rounded-[2px] border border-white/50 text-[0.7rem] font-light uppercase tracking-[0.2em] text-white transition-all duration-300"
+                    style={{ padding: "1.2rem 2.8rem", backdropFilter: "blur(8px)", background: "rgba(0,0,0,0.2)" }}
                   >
-                    <RiPlayCircleLine className="text-[1.1rem]" />
+                    <RiPlayCircleLine className="text-[1.3rem]" />
                     View Projects
                   </Link>
                 </div>
@@ -248,7 +252,7 @@ const Hero = () => {
         </div>
 
         {/* ── Bottom controls row — counter + dots together, no overlap ── */}
-        <div className="relative z-[2] flex items-end justify-between pb-6" style={{ padding: "0 clamp(1.5rem,5vw,5rem) 1.5rem" }}>
+        <div className="relative z-[15] mt-auto flex items-end justify-between pb-6" style={{ padding: "0 clamp(1.5rem,5vw,5rem) 1.5rem" }}>
 
           {/* Scroll indicator — left */}
           <div className="hero-scroll flex flex-col items-center gap-2">
@@ -292,8 +296,6 @@ const Hero = () => {
           </div>
 
         </div>
-
-        
 
       </section>
     </>

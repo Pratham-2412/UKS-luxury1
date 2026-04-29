@@ -24,6 +24,18 @@ export const createCollection     = (d) => api.post("/collections", d);
 export const updateCollection     = (id, d) => api.put(`/collections/${id}`, d);
 export const deleteCollection     = (id)    => api.delete(`/collections/${id}`);
 
+// ── Subcategories ─────────────────────────────────────────────────────────
+export const getSubcategories    = (p)    => api.get("/subcategories", { params: p });
+export const createSubcategory   = (d)    => api.post("/subcategories", d);
+export const updateSubcategory   = (id,d) => api.put(`/subcategories/${id}`, d);
+export const deleteSubcategory   = (id)   => api.delete(`/subcategories/${id}`);
+
+// ── Subcategory Items ─────────────────────────────────────────────────────
+export const getSubcategoryItems   = (p)    => api.get("/subcategory-items", { params: p });
+export const createSubcategoryItem = (d)    => api.post("/subcategory-items", d);
+export const updateSubcategoryItem = (id,d) => api.put(`/subcategory-items/${id}`, d);
+export const deleteSubcategoryItem = (id)   => api.delete(`/subcategory-items/${id}`);
+
 // ── Projects ──────────────────────────────────────────────────────────────
 export const getAdminProjects  = (p) => api.get("/projects", { params: { ...p, limit: 100 } });
 export const createProject     = (d) => api.post("/projects", d);
@@ -74,5 +86,10 @@ export const uploadImage  = (formData) =>
 
 export const uploadImages = (formData) =>
   api.post("/upload/images", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+export const uploadZip = (formData) =>
+  api.post("/upload/zip", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });

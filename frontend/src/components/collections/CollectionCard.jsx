@@ -23,7 +23,15 @@ const CollectionCard = ({ collection, index = 0 }) => {
     <>
     <article
       className="group flex flex-col gap-5 cursor-pointer animate-fade-up"
-      onClick={() => navigate(`/collections/${collection.slug}`)}
+      onClick={() => {
+        // Force redirect to the specialized Bespoke Kitchens landing page if slug matches kitchen terms
+        const kSlugs = ["bespoke-kitchens", "kitchens", "kitchen", "modern-kitchens"];
+        if (kSlugs.includes(collection.slug)) {
+          navigate("/collections/bespoke-kitchens");
+        } else {
+          navigate(`/collections/${collection.slug}`);
+        }
+      }}
       style={{ animationDelay: `${0.07 * index}s` }}
     >
         {/* Image Box */}

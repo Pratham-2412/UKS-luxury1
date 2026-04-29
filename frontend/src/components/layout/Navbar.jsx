@@ -188,7 +188,7 @@ const Navbar = () => {
       {/* ── Header ── */}
       <header
         style={{
-          position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
           transition: "background 0.4s, border-color 0.4s",
           background: scrolled || !isHome ? "rgba(10,10,10,0.96)" : "transparent",
           backdropFilter: scrolled || !isHome ? "blur(12px)" : "none",
@@ -296,7 +296,7 @@ const Navbar = () => {
         style={{
           position: "fixed", inset: 0,
           background: "rgba(0,0,0,0.75)",
-          zIndex: 40,
+          zIndex: 150,
           transition: "opacity 0.3s ease",
           opacity: mobileOpen ? 1 : 0,
           pointerEvents: mobileOpen ? "auto" : "none",
@@ -310,7 +310,7 @@ const Navbar = () => {
           height: "100%", width: "310px",
           background: "#0c0c0c",
           borderLeft: "1px solid rgba(255,255,255,0.06)",
-          zIndex: 50,
+          zIndex: 200,
           display: "flex", flexDirection: "column",
           transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
           transform: mobileOpen ? "translateX(0)" : "translateX(100%)",
