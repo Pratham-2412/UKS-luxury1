@@ -1,8 +1,9 @@
 // src/pages/public/BespokeSubcategoryDetail.jsx
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { createPortal } from "react-dom";
 import { getPublicSubcategories, getPublicSubcategoryBySlug, getPublicSubcategoryItemsBySlug } from "../../api/subcategoryApi";
+import { getCollectionBySlug } from "../../api/collectionApi";
 import { RiArrowRightLine, RiCloseLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 
 /* ── Lightbox Component ── */
@@ -45,29 +46,32 @@ const Lightbox = ({ images, title, activeIdx, onClose, onPrev, onNext }) => {
   );
 };
 
-/* ── Scroll Reveal Hook ── */
-const useSR = (threshold = 0.1) => {
-  const ref = useRef(null);
-  const [v, setV] = useState(false);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, v];
-};
+// Scroll reveal hook removed for performance on large grids
 
 /* ── Product Item Card ── */
-const ProductCard = ({ item, index, onClick }) => {
-  const [ref, inView] = useSR(0.08);
+const ProductCard = memo(({ item, index, onClick }) => {
   const [hovered, setHovered] = useState(false);
   return (
-    <div ref={ref} className="bs-prod-card" style={{ opacity: inView ? 1 : 0, transform: inView ? "translateY(0)" : "translateY(25px)", transitionDelay: `${index * 0.06}s` }}
-      onClick={onClick} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <div className="bs-prod-card__img-wrap">
-        <img src={(item.images && item.images[0]) || "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80"} alt={item.name} className="bs-prod-card__img" loading="lazy"
-          style={{ transform: hovered ? "scale(1.06)" : "scale(1)", filter: hovered ? "brightness(0.6)" : "brightness(0.82)" }} />
+    <div 
+      className="bs-prod-card bs-anim-grid" 
+      style={{ animationDelay: `${(index % 6) * 0.1}s` }}
+      onClick={onClick} 
+      onMouseEnter={() => setHovered(true)} 
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="bs-prod-card__img-wrap" style={{ backfaceVisibility: "hidden", transform: "translateZ(0)" }}>
+        <img 
+          src={(item.images && item.images[0]) || "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80"} 
+          alt={item.name} 
+          className="bs-prod-card__img" 
+          loading="lazy"
+          decoding="async"
+          style={{ 
+            transform: hovered ? "scale(1.04)" : "scale(1)", 
+            filter: hovered ? "brightness(0.7)" : "brightness(0.85)",
+            transition: "transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease"
+          }} 
+        />
         <div className="bs-prod-card__overlay" />
         <div className="bs-prod-card__view" style={{ opacity: hovered ? 1 : 0, transform: hovered ? "translateY(0)" : "translateY(8px)" }}>
           <span>View Image</span>
@@ -77,13 +81,14 @@ const ProductCard = ({ item, index, onClick }) => {
       <h4 className="bs-prod-card__name" style={{ color: hovered ? "#c4a064" : "#f0ece4" }}>{item.name}</h4>
     </div>
   );
-};
+});
 
 /* ── Main Page ── */
-const BespokeSubcategoryDetail = () => {
-  const { brand: brandSlug } = useParams();
+const BrandDetail = () => {
+  const { collectionSlug, brandSlug } = useParams();
   const [activeProduct, setActiveProduct] = useState(null);
   const [lbIdx, setLbIdx] = useState(0);
+  const [collection, setCollection] = useState(null);
   const [brand, setBrand] = useState(null);
   const [products, setProducts] = useState([]);
   const [otherBrands, setOtherBrands] = useState([]);
@@ -99,12 +104,18 @@ const BespokeSubcategoryDetail = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const brandRes = await getPublicSubcategoryBySlug(brandSlug);
-        setBrand(brandRes.data.data);
-        const itemsRes = await getPublicSubcategoryItemsBySlug(brandSlug);
-        setProducts(itemsRes.data.data || []);
-        const allRes = await getPublicSubcategories();
-        const allBrands = allRes.data.data || [];
+        const [collRes, brandRes, itemsRes, allBrandsRes] = await Promise.all([
+          getCollectionBySlug(collectionSlug),
+          getPublicSubcategoryBySlug(brandSlug),
+          getPublicSubcategoryItemsBySlug(brandSlug),
+          getPublicSubcategories({ collectionSlug })
+        ]);
+        
+        setCollection(collRes.data?.data || collRes.data?.collection);
+        setBrand(brandRes.data?.data);
+        setProducts(itemsRes.data?.data || []);
+        
+        const allBrands = allBrandsRes.data?.data || [];
         setOtherBrands(allBrands.filter(b => b.slug !== brandSlug).slice(0, 3));
       } catch (err) {
         console.error(err);
@@ -113,7 +124,7 @@ const BespokeSubcategoryDetail = () => {
       }
     };
     fetchData();
-  }, [brandSlug]);
+  }, [collectionSlug, brandSlug]);
 
   if (loading) {
     return (
@@ -127,7 +138,7 @@ const BespokeSubcategoryDetail = () => {
     return (
       <div style={{ minHeight: "100vh", background: "#0a0a0a", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1.5rem" }}>
         <p style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "1.8rem", color: "#5a5550", fontStyle: "italic" }}>Brand not found.</p>
-        <Link to="/collections/bespoke-kitchens" style={{ fontFamily: "'Jost',sans-serif", fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#c4a064", textDecoration: "none" }}>← Back to Bespoke Kitchens</Link>
+        <Link to={`/collections/${collectionSlug}`} style={{ fontFamily: "'Jost',sans-serif", fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#c4a064", textDecoration: "none" }}>← Back to {collection?.title || "Collection"}</Link>
       </div>
     );
   }
@@ -138,6 +149,7 @@ const BespokeSubcategoryDetail = () => {
         .bs-page{min-height:100vh;background:#0a0a0a;color:#f0ece4}
         @keyframes bsFade{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
         .bs-anim{animation:bsFade 0.8s ease forwards}
+        .bs-anim-grid{opacity:0;animation:bsFade 1s cubic-bezier(0.16,1,0.3,1) forwards}
 
         .bs-desc-section{max-width:1400px;margin:0 auto;padding:3.5rem clamp(1.25rem,5vw,4rem) 2rem}
         .bs-desc-wrap{display:grid;grid-template-columns:1fr 320px;gap:3.5rem;align-items:start}
@@ -231,9 +243,16 @@ const BespokeSubcategoryDetail = () => {
           <img className="w-full h-full object-cover brightness-50" src={brand?.heroImage || brand?.thumbnail || "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80"} alt={brand.name} />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 max-w-[1400px] mx-auto px-[clamp(1.5rem,5vw,5rem)] pb-12 sm:pb-16">
-            <Link to="/collections/bespoke-kitchens" className="inline-flex items-center gap-2 text-[0.65rem] tracking-[0.2em] uppercase text-[#c4a064] mb-8 hover:opacity-70 transition-opacity bs-anim">← Back to Bespoke Kitchens</Link>
+            <Link to={`/collections/${collectionSlug}`} className="inline-flex items-center gap-2 text-[0.65rem] tracking-[0.2em] uppercase text-[#c4a064] mb-8 hover:opacity-70 transition-opacity bs-anim">← Back to {collection?.title || "Collection"}</Link>
+            
+            {brand?.logo && (
+              <div className="bs-anim mb-6" style={{ animationDelay: "0.05s" }}>
+                <img src={brand.logo} alt={`${brand.name} Logo`} style={{ height: "clamp(30px, 5vw, 45px)", width: "auto", objectFit: "contain" }} />
+              </div>
+            )}
+
             <span className="flex items-center gap-3 text-[0.72rem] tracking-[0.28em] uppercase text-[#c4a064] mb-4 bs-anim" style={{ animationDelay: "0.1s" }}>
-              <span className="block w-8 h-px bg-[#c4a064] opacity-50" />Bespoke Kitchens — Partner Brand
+              <span className="block w-8 h-px bg-[#c4a064] opacity-50" />{collection?.title || "Collection"} — Partner Brand
             </span>
             <h1 className="font-serif text-[clamp(2.2rem,6vw,5rem)] font-light text-white leading-[1.05] mb-4 bs-anim" style={{ animationDelay: "0.22s" }}>{brand.name}</h1>
             <p className="text-[clamp(0.9rem,1.5vw,1.05rem)] text-white/60 font-light max-w-[500px] leading-[1.8] bs-anim" style={{ animationDelay: "0.38s" }}>{brand.tagline}</p>
@@ -244,7 +263,7 @@ const BespokeSubcategoryDetail = () => {
         <div className="bs-desc-section">
           <div className="bs-desc-wrap">
             <div>
-              {brand?.longDescription && <div className="bs-long-desc" dangerouslySetInnerHTML={{ __html: brand.longDescription }} />}
+              {brand?.description && <div className="bs-long-desc" dangerouslySetInnerHTML={{ __html: brand.description }} />}
             </div>
             <aside className="bs-sidebar">
               <div className="bs-sidebar__card">
@@ -254,8 +273,8 @@ const BespokeSubcategoryDetail = () => {
                   <span style={{ display: "block", fontFamily: "'Jost',sans-serif", fontSize: "0.875rem", color: "#f0ece4", fontWeight: 300 }}>{brand.name}</span>
                 </div>
                 <div style={{ padding: "0.6rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#3e3c3a" }}>Category</span>
-                  <span style={{ display: "block", fontFamily: "'Jost',sans-serif", fontSize: "0.875rem", color: "#f0ece4", fontWeight: 300 }}>Bespoke Kitchens</span>
+                  <span style={{ fontFamily: "'Jost',sans-serif", fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#3e3c3a" }}>Collection</span>
+                  <span style={{ display: "block", fontFamily: "'Jost',sans-serif", fontSize: "0.875rem", color: "#f0ece4", fontWeight: 300 }}>{collection?.title || "Collection"}</span>
                 </div>
                 {products.length > 0 && (
                   <div style={{ padding: "0.6rem 0" }}>
@@ -301,7 +320,7 @@ const BespokeSubcategoryDetail = () => {
             <h2 className="bs-related__heading">More Partner Brands</h2>
             <div className="bs-related__grid">
               {otherBrands.map(b => (
-                <Link key={b.slug} to={`/collections/bespoke-kitchens/${b.slug}`} className="bs-related__card">
+                <Link key={b.slug} to={`/collections/${collectionSlug}/${b.slug}`} className="bs-related__card">
                   <div style={{ overflow: "hidden", borderRadius: "12px" }}>
                     <img src={b.thumbnail || "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=80"} alt={b.name} className="bs-related__card-img" />
                   </div>
@@ -319,4 +338,4 @@ const BespokeSubcategoryDetail = () => {
   );
 };
 
-export default BespokeSubcategoryDetail;
+export default BrandDetail;

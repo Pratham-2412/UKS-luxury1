@@ -78,6 +78,12 @@ export const createTestimonial = (d)    => api.post("/testimonials", d);
 export const updateTestimonial = (id,d) => api.put(`/testimonials/${id}`, d);
 export const deleteTestimonial = (id)   => api.delete(`/testimonials/${id}`);
 
+// ── Brands ────────────────────────────────────────────────────────────
+export const getBrands         = ()     => api.get("/brands");
+export const createBrand       = (d)    => api.post("/brands", d);
+export const updateBrand       = (id,d) => api.put(`/brands/${id}`, d);
+export const deleteBrand       = (id)   => api.delete(`/brands/${id}`);
+
 // ── Upload ────────────────────────────────────────────────────────────────
 export const uploadImage  = (formData) =>
   api.post("/upload/image", formData, {

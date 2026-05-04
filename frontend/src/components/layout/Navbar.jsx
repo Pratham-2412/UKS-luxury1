@@ -58,6 +58,7 @@ const Navbar = () => {
   const [drawerOpen, setDrawerOpen]         = useState(false);
 
   const dropdownRef = useRef(null);
+  const closeTimer = useRef(null);
   const { cartCount } = useCart();
   const { settings } = useSettings();
   const { pathname } = useLocation();
@@ -71,9 +72,17 @@ const Navbar = () => {
 
   useEffect(() => {
     setMobileOpen(false);
-    setDropdownOpen(false);
     setMobileCollOpen(false);
   }, [pathname]);
+
+  const handleDropdownEnter = () => {
+    clearTimeout(closeTimer.current);
+    setDropdownOpen(true);
+  };
+
+  const handleDropdownLeave = () => {
+    closeTimer.current = setTimeout(() => setDropdownOpen(false), 150);
+  };
 
   useEffect(() => {
     const handler = (e) => {
@@ -130,16 +139,19 @@ const Navbar = () => {
 
         .dropdown-panel {
           position: absolute;
-          top: calc(100% + 14px);
+          top: 100%;
           left: 50%;
           width: 230px;
-          background: #0f0f0f;
-          border: 1px solid rgba(255,255,255,0.08);
-          border-top: 2px solid #c4a064;
+          padding-top: 14px;
           transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16,1,0.3,1);
         }
         .dropdown-panel.open  { opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto; }
         .dropdown-panel.close { opacity:0; transform:translateX(-50%) translateY(-8px); pointer-events:none; }
+        .dropdown-panel-inner {
+          background: #0f0f0f;
+          border: 1px solid rgba(255,255,255,0.08);
+          border-top: 2px solid #c4a064;
+        }
 
         .dropdown-item {
           font-family: 'Jost', sans-serif;
@@ -213,8 +225,8 @@ const Navbar = () => {
                   key={link.label}
                   style={{ position: "relative" }}
                   ref={dropdownRef}
-                  onMouseEnter={() => setDropdownOpen(true)}
-                  onMouseLeave={() => setDropdownOpen(false)}
+                  onMouseEnter={handleDropdownEnter}
+                  onMouseLeave={handleDropdownLeave}
                 >
                   <button
                     onClick={() => setDropdownOpen((p) => !p)}
@@ -225,14 +237,18 @@ const Navbar = () => {
                   </button>
 
                   <div className={`dropdown-panel ${dropdownOpen ? "open" : "close"}`}>
-                    <div style={{ padding: "1.25rem" }}>
+                    <div className="dropdown-panel-inner" style={{ padding: "1.25rem" }}>
                       <p style={{ fontSize: "0.52rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#c4a064", marginBottom: "10px", fontFamily: "'Jost', sans-serif" }}>
                         Our Collections
                       </p>
                       <ul style={{ display: "flex", flexDirection: "column" }}>
                         {COLLECTION_ITEMS.map((item) => (
                           <li key={item.slug}>
-                            <Link to={`/collections/${item.slug}`} className="dropdown-item">
+                            <Link
+                              to={`/collections/${item.slug}`}
+                              className="dropdown-item"
+                              onClick={() => setDropdownOpen(false)}
+                            >
                               <span style={{ width: "4px", height: "4px", borderRadius: "50%", background: "rgba(196,160,100,0.45)", flexShrink: 0 }} />
                               {item.label}
                             </Link>
@@ -241,6 +257,7 @@ const Navbar = () => {
                       </ul>
                       <Link
                         to="/collections"
+                        onClick={() => setDropdownOpen(false)}
                         style={{ display: "block", marginTop: "10px", paddingTop: "10px", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "0.6rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#c4a064", fontFamily: "'Jost', sans-serif", transition: "color 0.15s" }}
                         onMouseEnter={e => e.target.style.color = "#e8d5a3"}
                         onMouseLeave={e => e.target.style.color = "#c4a064"}

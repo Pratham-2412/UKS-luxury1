@@ -2,12 +2,78 @@
 import { useState, useEffect } from "react";
 import { getAllCollections } from "../../api/collectionApi";
 import CollectionCard from "../../components/collections/CollectionCard";
-import CollectionFilter from "../../components/collections/CollectionFilter";
+
+// ── These are the ONLY categories we show — matching the navbar ───────────
+const STANDARD_COLLECTIONS = [
+  {
+    slug: "bespoke-kitchens",
+    title: "Bespoke Kitchens",
+    type: "Kitchen",
+    thumbnail: "/bespoke-kitchen.jpg",
+    shortDescription: "German precision meets award-winning design. Discover our premium partner brands.",
+  },
+  {
+    slug: "dining-rooms",
+    title: "Dining Rooms",
+    type: "DiningRoom",
+    thumbnail: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=1200&q=80",
+    shortDescription: "Elegant spaces designed for unforgettable gatherings and timeless memories.",
+  },
+  {
+    slug: "living-room",
+    title: "Living Room",
+    type: "LivingRoom",
+    thumbnail: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1200&q=80",
+    shortDescription: "Sophisticated comfort crafted with the finest materials and European aesthetics.",
+  },
+  {
+    slug: "offices",
+    title: "Offices",
+    type: "HomeOffice",
+    thumbnail: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
+    shortDescription: "Productivity meets elegance in our custom-designed professional workspaces.",
+  },
+  {
+    slug: "bookcases",
+    title: "Bookcases",
+    type: "LivingRoom",
+    thumbnail: "https://images.unsplash.com/photo-1594620302200-9a762244a156?w=1200&q=80",
+    shortDescription: "Bespoke shelving solutions that showcase your collection with understated luxury.",
+  },
+  {
+    slug: "hinged-wardrobes",
+    title: "Hinged Wardrobes",
+    type: "Wardrobe",
+    thumbnail: "https://images.unsplash.com/photo-1558997519-53bb890929a3?w=1200&q=80",
+    shortDescription: "Classic wardrobe design with timeless elegance and premium craftsmanship.",
+  },
+  {
+    slug: "sliding-wardrobes",
+    title: "Sliding Wardrobes",
+    type: "Wardrobe",
+    thumbnail: "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=1200&q=80",
+    shortDescription: "Space-efficient luxury with smooth, seamless sliding mechanisms.",
+  },
+  {
+    slug: "walk-in-closet",
+    title: "Walk In Closet",
+    type: "Wardrobe",
+    thumbnail: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80",
+    shortDescription: "Your personal dressing sanctuary, designed to perfection.",
+  },
+  {
+    slug: "storage-units",
+    title: "Storage Units",
+    type: "LivingRoom",
+    thumbnail: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=1200&q=80",
+    shortDescription: "Intelligent storage solutions that blend seamlessly into your living space.",
+  },
+];
 
 const SkeletonCard = () => (
   <div style={{
     borderRadius: "14px", overflow: "hidden",
-    aspectRatio: "4/3", background: "#111",
+    aspectRatio: "3/2", background: "#111",
     backgroundImage: "linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%)",
     backgroundSize: "300% 100%",
     animation: "colShimmer 1.6s infinite",
@@ -17,35 +83,31 @@ const SkeletonCard = () => (
 const Collections = () => {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading]         = useState(true);
-  const [activeType, setActiveType]   = useState("");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
     setLoading(true);
-    const params = { status: "active" };
-    if (activeType) params.type = activeType;
-    getAllCollections(params)
+    getAllCollections({ status: "active", limit: 100 })
       .then((res) => setCollections(res.data.collections || []))
       .catch(() => setCollections([]))
       .finally(() => setLoading(false));
-  }, [activeType]);
+  }, []);
 
-  // Inject a permanent Bespoke Kitchens card when "All" or "Kitchens" filter is active
-  // Using the same /bespoke-kitchen.jpg thumbnail as the home page
-  const data = (activeType === "" || activeType === "Kitchen")
-    ? [
-        {
-          _id: "bespoke-kitchen-hardcoded",
-          title: "Bespoke Kitchens",
-          slug: "bespoke-kitchens",
-          type: "Kitchen",
-          featured: true,
-          thumbnail: "/bespoke-kitchen.jpg",
-          shortDescription: "German precision meets award-winning design. Discover our premium partner brands."
-        },
-        ...collections.filter(c => c.slug !== "bespoke-kitchens")
-      ]
-    : collections;
+  // Merge backend data with standard list — backend data takes priority for thumbnail/description
+  const data = STANDARD_COLLECTIONS.map((std) => {
+    const fromDB = collections.find((c) => c.slug === std.slug);
+    if (fromDB) {
+      return {
+        ...std,
+        ...fromDB,
+        // Keep our standard title if backend doesn't have a good one
+        title: fromDB.title || std.title,
+        thumbnail: fromDB.thumbnail || std.thumbnail,
+        shortDescription: fromDB.shortDescription || std.shortDescription,
+      };
+    }
+    return { ...std, _id: std.slug };
+  });
 
   return (
     <>
@@ -99,14 +161,12 @@ const Collections = () => {
           </div>
         </section>
 
-        <CollectionFilter active={activeType} onChange={setActiveType} />
-
         <div className="col-grid">
           {loading
-            ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+            ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
             : data.length > 0
               ? data.map((item, i) => (
-                  <CollectionCard key={item._id} collection={item} index={i} />
+                  <CollectionCard key={item._id || item.slug} collection={item} index={i} />
                 ))
               : <p className="col-empty">No collections found.</p>
           }

@@ -6,8 +6,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Home             from "../pages/public/Home";
 import Collections      from "../pages/public/Collections";
 import CollectionDetail from "../pages/public/CollectionDetail";
-import BespokeKitchenDetail from "../pages/public/BespokeKitchenDetail";
-import BespokeSubcategoryDetail from "../pages/public/BespokeSubcategoryDetail";
+import BrandDetail from "../pages/public/BrandDetail";
 import Projects         from "../pages/public/Projects";
 import ProjectDetail    from "../pages/public/ProjectDetail";
 import Offers           from "../pages/public/Offers";
@@ -32,6 +31,7 @@ import AdminSettings     from "../pages/admin/AdminSettings";
 import AdminCategories   from "../pages/admin/AdminCategories";
 import AdminSubcategories from "../pages/admin/AdminSubcategories";
 import AdminSubcategoryItems from "../pages/admin/AdminSubcategoryItems";
+import AdminBrands       from "../pages/admin/AdminBrands";
 
 const AppRouter = () => (
   <Routes>
@@ -39,9 +39,8 @@ const AppRouter = () => (
     <Route element={<Layout />}>
       <Route path="/"                  element={<Home />} />
       <Route path="/collections"       element={<Collections />} />
-      <Route path="/collections/bespoke-kitchens" element={<BespokeKitchenDetail />} />
-      <Route path="/collections/bespoke-kitchens/:brand" element={<BespokeSubcategoryDetail />} />
       <Route path="/collections/:slug" element={<CollectionDetail />} />
+      <Route path="/collections/:collectionSlug/:brandSlug" element={<BrandDetail />} />
       <Route path="/projects"          element={<Projects />} />
       <Route path="/projects/:slug"    element={<ProjectDetail />} />
       <Route path="/offers"            element={<Offers />} />
@@ -69,6 +68,7 @@ const AppRouter = () => (
       <Route path="inquiries" element={<AdminInquiries />} />
       <Route path="orders" element={<AdminOrders />} />
       <Route path="testimonials" element={<AdminTestimonials />} />
+      <Route path="brands" element={<AdminBrands />} />
       <Route path="settings" element={<AdminSettings />} />
     </Route>
   </Routes>

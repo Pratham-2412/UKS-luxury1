@@ -35,7 +35,7 @@ const CollectionCard = ({ collection, index = 0 }) => {
       style={{ animationDelay: `${0.07 * index}s` }}
     >
         {/* Image Box */}
-        <div className="relative aspect-[16/11] overflow-hidden rounded-2xl bg-[#111]">
+        <div className="relative aspect-[3/2] overflow-hidden rounded-2xl bg-[#111]">
           <img
             className="w-full h-full object-cover brightness-90 transition-transform duration-700 cubic-bezier(0.16, 1, 0.3, 1) group-hover:scale-[1.05] group-hover:brightness-100"
             src={collection.thumbnail || collection.image || FALLBACK}

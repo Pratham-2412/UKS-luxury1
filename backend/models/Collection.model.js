@@ -30,7 +30,7 @@ const collectionSchema = new mongoose.Schema(
     shortDescription: {
       type: String,
       trim: true,
-      maxlength: [300, "Short description cannot exceed 300 characters"],
+      maxlength: [1000, "Short description cannot exceed 1000 characters"],
       default: "",
     },
     longDescription: {

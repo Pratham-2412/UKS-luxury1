@@ -1,6 +1,7 @@
 // src/pages/public/Home.jsx
 import { useEffect, useState } from "react";
 import Hero from "../../components/sections/Hero";
+import BrandMarquee from "../../components/sections/BrandMarquee";
 import FeaturedCollections from "../../components/sections/FeaturedCollections";
 import FeaturedProjects from "../../components/sections/FeaturedProjects";
 import WhyUs from "../../components/sections/WhyUs";
@@ -52,6 +53,7 @@ const Home = () => {
   return (
     <div className="bg-[#0a0a0a]">
       <Hero />
+      <BrandMarquee />
       <FeaturedCollections collections={collections} />
       <FeaturedProjects projects={projects} />
       <WhyUs />

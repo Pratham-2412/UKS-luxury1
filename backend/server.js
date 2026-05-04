@@ -61,6 +61,7 @@ const paymentRoutes     = require("./routes/payment.routes");
 const uploadRoutes      = require("./routes/upload.routes");
 const subcategoryRoutes = require("./routes/subcategory.routes");
 const subcategoryItemRoutes = require("./routes/subcategoryItem.routes");
+const brandRoutes       = require("./routes/brand.routes");
 
 app.use("/api/auth",          authRoutes);
 app.use("/api/hero-sections", heroRoutes);
@@ -78,6 +79,7 @@ app.use("/api/payments",      paymentRoutes);
 app.use("/api/upload",        uploadRoutes);
 app.use("/api/subcategories", subcategoryRoutes);
 app.use("/api/subcategory-items", subcategoryItemRoutes);
+app.use("/api/brands",          brandRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res, next) => {

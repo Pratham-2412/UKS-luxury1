@@ -138,7 +138,7 @@ const FeaturedCollections = ({ collections }) => {
   ];
 
   return (
-    <section className="relative overflow-hidden py-28" style={{ background: "#0a0a0a" }}>
+    <section className="relative overflow-hidden pb-28" style={{ background: "#0a0a0a" }}>
       <div className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(196,160,100,0.03), transparent 70%)" }} />
 
       <div ref={secRef} className="relative mx-auto max-w-[1400px]" style={{ padding: "0 clamp(1.5rem,5vw,5rem)" }}>

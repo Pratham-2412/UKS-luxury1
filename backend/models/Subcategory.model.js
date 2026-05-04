@@ -26,11 +26,19 @@ const subcategorySchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    externalUrl: {
+      type: String,
+      default: "",
+    },
     thumbnail: {
       type: String,
       default: "",
     },
     heroImage: {
+      type: String,
+      default: "",
+    },
+    logo: {
       type: String,
       default: "",
     },
