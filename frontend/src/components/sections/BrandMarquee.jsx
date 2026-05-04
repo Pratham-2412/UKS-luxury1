@@ -26,7 +26,7 @@ const BrandMarquee = () => {
         src={brand.logo}
         alt={brand.name}
         style={{
-          height: "36px",
+          height: "65px",
           maxWidth: "140px",
           objectFit: "contain",
         }}
