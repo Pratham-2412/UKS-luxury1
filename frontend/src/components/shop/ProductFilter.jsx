@@ -12,11 +12,8 @@ import { RiEqualizerLine, RiAddLine, RiSubtractLine } from "react-icons/ri";
   { label: "Hoods",               value: "Hoods" },
   { label: "Coffee Machines",     value: "Coffee Machines" },
   { label: "Microwaves",          value: "Microwaves" },
+  { label: "Warming Drawers",     value: "Warming Drawers" },
   { label: "Dishwashers",         value: "Dishwashers" },
-  { label: "Refrigeration",       value: "Refrigeration" },
-  { label: "Wall Finishes",       value: "Wall Finishes" },
-  { label: "Smart Home",          value: "Smart Home" },
-  { label: "Furniture",           value: "Sofas" },
   { label: "Accessories",         value: "Accessories" },
 ];
 

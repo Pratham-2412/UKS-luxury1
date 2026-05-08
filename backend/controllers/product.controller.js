@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Product = require("../models/Product.model");
 
 // ─── GET /api/products (public — filters, sort, pagination) ──────────────────
