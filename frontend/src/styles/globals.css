@@ -28,6 +28,7 @@
   --animate-gold-shimmer: goldSweep 3.5s linear infinite;
   --animate-page-enter:   pageMountIn 0.55s cubic-bezier(0.16,1,0.3,1) both;
   --animate-shimmer:      shimmer 1.6s infinite;
+  --animate-marquee:      marqueeScroll 30s linear infinite;
 }
 
 /* ── Base reset ───────────────────────────────────────────────────────────── */
@@ -42,7 +43,7 @@
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -moz-osx-grayscale: grayscale;
   }
 
   body {
@@ -54,37 +55,11 @@
     overflow-x: hidden;
   }
 
-  img, video, iframe {
-    max-width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-
-  button {
-    font-family: inherit;
-    cursor: pointer;
-    border: none;
-    background: none;
-  }
-
-  ::selection {
-    background: rgba(196, 160, 100, 0.25);
-    color: #e8d5a3;
-  }
-
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: #0a0a0a; }
   ::-webkit-scrollbar-thumb {
     background: rgba(196, 160, 100, 0.3);
     border-radius: 2px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(196, 160, 100, 0.55);
   }
 }
 
@@ -104,9 +79,51 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes shimmer {
-  0%   { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+@keyframes marqueeScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Custom Global Effects (The "Glob") ───────────────────────────────────── */
+@layer utilities {
+  .luxury-gradient {
+    background: linear-gradient(180deg, #060606 0%, #0d0d0d 50%, #060606 100%);
+  }
+
+  .gold-border-y {
+    border-top: 1px solid rgba(196, 160, 100, 0.15);
+    border-bottom: 1px solid rgba(196, 160, 100, 0.15);
+  }
+
+  .glass-glow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(196, 160, 100, 0.15), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .glass-glow:hover::after {
+    opacity: 1;
+  }
+
+  .brand-logo-glow {
+    filter: drop-shadow(0 0 0px rgba(196, 160, 100, 0));
+    transition: filter 0.4s ease, transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  .brand-logo-glow:hover {
+    filter: drop-shadow(0 0 12px rgba(196, 160, 100, 0.3));
+    transform: scale(1.08);
+    opacity: 1 !important;
+  }
 }
 
 /* ── Custom utilities ─────────────────────────────────────────────────────── */

@@ -3,18 +3,21 @@ import { useState } from "react";
 import { RiEqualizerLine, RiAddLine, RiSubtractLine } from "react-icons/ri";
 
 
- const CATEGORIES = [
+  const CATEGORIES = [
   { label: "All Items",           value: "" },
   { label: "Hobs",                value: "Hobs" },
   { label: "Ovens",               value: "Ovens" },
   { label: "Quooker",             value: "Quooker" },
   { label: "Kitchen Sinks",       value: "Kitchen Sinks" },
   { label: "Hoods",               value: "Hoods" },
-  { label: "Accessories",         value: "Accessories" },
   { label: "Coffee Machines",     value: "Coffee Machines" },
   { label: "Microwaves",          value: "Microwaves" },
-  { label: "Warming Drawers",     value: "Warming Drawers" },
   { label: "Dishwashers",         value: "Dishwashers" },
+  { label: "Refrigeration",       value: "Refrigeration" },
+  { label: "Wall Finishes",       value: "Wall Finishes" },
+  { label: "Smart Home",          value: "Smart Home" },
+  { label: "Furniture",           value: "Sofas" },
+  { label: "Accessories",         value: "Accessories" },
 ];
 
 // ── Accordion wrapper ──────────────────────────────────────────────

@@ -84,9 +84,9 @@ const ProductCard = ({ product, index = 0 }) => {
           {product.name}
         </h3>
 
-        {product.description && (
+        {(product.shortDescription || product.description) && (
           <p className="text-[0.95rem] text-white/60 leading-relaxed font-light line-clamp-2 max-w-[95%]">
-            {product.description}
+            {product.shortDescription || product.description}
           </p>
         )}
 

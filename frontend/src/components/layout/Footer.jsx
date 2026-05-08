@@ -254,7 +254,7 @@ const Footer = () => {
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "1.25rem clamp(1.5rem,5vw,5rem)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.5rem" }}>
             <p style={{ fontSize: "0.75rem", fontWeight: 300, color: W }}>
-              © {year} {siteName}. All rights reserved.
+              © {year} {siteName}. All rights reserved. | Created by <a href="https://technoadviser.com/" target="_blank" rel="noopener noreferrer" style={{ color: "#c4a064", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => e.currentTarget.style.color = "#e8d5a3"} onMouseLeave={e => e.currentTarget.style.color = "#c4a064"}>Technoadviser</a>
             </p>
             <p style={{ fontSize: "0.75rem", fontWeight: 300, color: W, fontStyle: "italic" }}>
               Crafted with precision & elegance

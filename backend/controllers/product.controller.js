@@ -18,7 +18,27 @@ const getAllProducts = async (req, res, next) => {
 
     const filter = { status: "active" };
 
-    if (category) filter.category = category;
+    if (category) {
+      if (mongoose.Types.ObjectId.isValid(category)) {
+        filter.category = category;
+      } else {
+        const Category = require("../models/Category.model");
+        const cat = await Category.findOne({ 
+          name: { $regex: new RegExp(`^${category}$`, "i") } 
+        });
+        if (cat) {
+          filter.category = cat._id;
+        } else {
+          return res.status(200).json({
+            success: true,
+            total: 0,
+            page: Number(page),
+            pages: 0,
+            products: [],
+          });
+        }
+      }
+    }
     if (featured) filter.featured = featured === "true";
     if (recommended) filter.recommended = recommended === "true";
     if (status && req.isAdmin) filter.status = status;

@@ -51,120 +51,58 @@ const BrandMarquee = () => {
   };
 
   return (
-    <>
-      <style>{`
-        @keyframes brandScroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .brand-track {
-          animation: brandScroll 30s linear infinite;
-        }
-        .brand-track:hover {
-          animation-play-state: paused;
-        }
-        .brand-item {
-          opacity: 0.7;
-          transition: opacity 0.4s ease, transform 0.4s ease;
-          text-decoration: none;
-        }
-        .brand-item:hover {
-          opacity: 1;
-          transform: scale(1.08);
-        }
-      `}</style>
+    <section className="relative overflow-hidden luxury-gradient gold-border-y py-9 mb-0">
+      {/* Edge fades */}
+      <div
+        className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-[120px]"
+        style={{ background: "linear-gradient(to right, #060606, transparent)" }}
+      />
+      <div
+        className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-[120px]"
+        style={{ background: "linear-gradient(to left, #060606, transparent)" }}
+      />
 
-      <section
-        className="relative overflow-hidden"
-        style={{
-          background: "linear-gradient(180deg, #060606 0%, #0d0d0d 50%, #060606 100%)",
-          borderTop: "1px solid rgba(196,160,100,0.15)",
-          borderBottom: "1px solid rgba(196,160,100,0.15)",
-          padding: "2.2rem 0",
-          marginBottom: "0",
-        }}
+      {/* Marquee track */}
+      <div
+        ref={trackRef}
+        className="animate-marquee flex items-center hover:[animation-play-state:paused] w-max gap-16"
       >
-        {/* Edge fades */}
-        <div
-          className="pointer-events-none absolute left-0 top-0 bottom-0 z-10"
-          style={{
-            width: "120px",
-            background: "linear-gradient(to right, #060606, transparent)",
-          }}
-        />
-        <div
-          className="pointer-events-none absolute right-0 top-0 bottom-0 z-10"
-          style={{
-            width: "120px",
-            background: "linear-gradient(to left, #060606, transparent)",
-          }}
-        />
+        {loopItems.map((brand, i) => {
+          const inner = (
+            <div className="flex-shrink-0 flex items-center justify-center min-w-[160px] h-12">
+              {renderBrandContent(brand)}
+            </div>
+          );
 
-        {/* Marquee track */}
-        <div
-          ref={trackRef}
-          className="brand-track flex items-center"
-          style={{
-            width: "max-content",
-            gap: "4rem",
-          }}
-        >
-          {loopItems.map((brand, i) => {
-            const inner = (
-              <div
-                className="flex-shrink-0 flex items-center justify-center"
-                style={{
-                  minWidth: "160px",
-                  height: "48px",
-                }}
-              >
-                {renderBrandContent(brand)}
-              </div>
-            );
+          if (brand.link) {
+            const isExternal = brand.link.startsWith("http");
+            const LinkComponent = isExternal ? "a" : Link;
+            const linkProps = isExternal
+              ? { href: brand.link, target: "_blank", rel: "noopener noreferrer" }
+              : { to: brand.link };
 
-            // If brand has a link, wrap in router Link (for internal) or <a> (for external)
-            if (brand.link) {
-              const isExternal = brand.link.startsWith("http");
-              if (isExternal) {
-                return (
-                  <a
-                    key={`${brand._id}-${i}`}
-                    href={brand.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="brand-item"
-                    style={{ cursor: "pointer" }}
-                  >
-                    {inner}
-                  </a>
-                );
-              }
-              return (
-                <Link
-                  key={`${brand._id}-${i}`}
-                  to={brand.link}
-                  className="brand-item"
-                  style={{ cursor: "pointer" }}
-                >
-                  {inner}
-                </Link>
-              );
-            }
-
-            // No link — not clickable
             return (
-              <div
+              <LinkComponent
                 key={`${brand._id}-${i}`}
-                className="brand-item"
-                style={{ cursor: "default" }}
+                {...linkProps}
+                className="brand-logo-glow opacity-70 cursor-pointer no-underline"
               >
                 {inner}
-              </div>
+              </LinkComponent>
             );
-          })}
-        </div>
-      </section>
-    </>
+          }
+
+          return (
+            <div
+              key={`${brand._id}-${i}`}
+              className="brand-logo-glow opacity-70 cursor-default"
+            >
+              {inner}
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 };
 
