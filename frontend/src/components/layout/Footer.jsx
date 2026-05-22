@@ -151,8 +151,8 @@ const Footer = () => {
 
         {/* ── Main grid ── */}
         <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "5rem clamp(1.5rem,5vw,5rem)" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "3rem 3.5rem" }}
-            className="lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
+          <div style={{ gap: "3rem 3.5rem" }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1.5fr]">
 
             {/* Brand */}
             <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>

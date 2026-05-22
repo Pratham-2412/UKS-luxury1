@@ -72,14 +72,14 @@ const ProjectDetail = () => {
     <main className="min-h-screen bg-[#0a0a0a] text-[#f0ece4] font-sans">
 
       {/* ── Hero image ── */}
-      <div className="relative aspect-[16/7] min-h-[280px] sm:min-h-[360px] overflow-hidden">
+      <div className="relative aspect-[16/7] min-h-[280px] sm:min-h-[360px] bg-[#141414]">
         <img
-          src={project.thumbnail || FALLBACK_IMG}
-          alt={project.title}
-          onError={(e) => (e.currentTarget.src = FALLBACK_IMG)}
-          className="w-full h-full object-cover brightness-60"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/30 to-transparent" />
+  className="w-full h-full object-cover brightness-90"
+  src={project.bannerImage || project.thumbnail || project.image || FALLBACK_IMG}
+  alt={project.title}
+  onError={(e) => (e.currentTarget.src = FALLBACK_IMG)}
+/>
+<div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/30 to-transparent" />
 
         {/* Tags */}
         <div className="absolute top-6 sm:top-8 left-[clamp(1.5rem,5vw,5rem)] flex items-center gap-2 flex-wrap">

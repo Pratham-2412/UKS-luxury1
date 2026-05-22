@@ -99,9 +99,8 @@ const Testimonials = ({ testimonials }) => {
         {/* Grid — 2 per row */}
         <div
           ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-2"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
             gap: "clamp(1rem,2vw,1.5rem)",
           }}
         >

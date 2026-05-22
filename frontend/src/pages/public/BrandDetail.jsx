@@ -240,7 +240,7 @@ const BrandDetail = () => {
 
         {/* ── Hero ── */}
         <section className="relative overflow-hidden" style={{ aspectRatio: "16/7", minHeight: "320px" }}>
-          <img className="w-full h-full object-cover brightness-50" src={brand?.heroImage || brand?.thumbnail || "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80"} alt={brand.name} />
+          <img className="w-full h-full object-cover brightness-90" src={brand?.heroImage || brand?.thumbnail || "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1600&q=80"} alt={brand.name} />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 max-w-[1400px] mx-auto px-[clamp(1.5rem,5vw,5rem)] pb-12 sm:pb-16">
             <Link to={`/collections/${collectionSlug}`} className="inline-flex items-center gap-2 text-[0.65rem] tracking-[0.2em] uppercase text-[#c4a064] mb-8 hover:opacity-70 transition-opacity bs-anim">← Back to {collection?.title || "Collection"}</Link>

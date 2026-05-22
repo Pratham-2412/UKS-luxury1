@@ -87,7 +87,7 @@ const Offers = () => {
         <img
           src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1600&q=80"
           alt="Exclusive Offers"
-          className="w-full h-full object-cover brightness-50"
+          className="w-full h-full object-cover brightness-90"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-transparent" />
         

@@ -34,7 +34,7 @@ const Projects = () => {
         <img
           src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1600&q=80"
           alt="Our Projects"
-          className="w-full h-full object-cover brightness-50"
+          className="w-full h-full object-cover brightness-90"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-transparent" />
         

@@ -1,17 +1,29 @@
-// src/components/common/Cursor.jsx
-// ─────────────────────────────────────────────────────────────────────────────
-// Custom luxury cursor — renders dot + ring, follows mouse.
-// Only active on pointer: fine devices (hides on touch).
-// ─────────────────────────────────────────────────────────────────────────────
+import { useEffect, useRef, useState } from "react";
 
-import { useEffect, useRef } from "react";
 const Cursor = () => {
   const dotRef  = useRef(null);
   const ringRef = useRef(null);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    // Only activate on non-touch devices
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    const checkDevice = () => {
+      const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
+      const isLargeScreen = window.innerWidth >= 1024;
+      const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+      
+      // Custom trailing cursor is active only on desktop/large screens with fine mouse pointers and no touch capabilities
+      setIsDesktop(hasFinePointer && isLargeScreen && !isTouchDevice);
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice, { passive: true });
+    return () => {
+      window.removeEventListener("resize", checkDevice);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) return;
 
     document.body.classList.add("custom-cursor");
 
@@ -75,7 +87,9 @@ const Cursor = () => {
       window.removeEventListener("mouseup",   onUp);
       cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [isDesktop]);
+
+  if (!isDesktop) return null;
 
   return (
     <>

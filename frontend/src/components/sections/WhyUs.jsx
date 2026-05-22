@@ -118,9 +118,8 @@ const WhyUs = () => {
         {/* Grid — spaced rounded cards */}
         <div
           ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
             gap: "clamp(1rem,2vw,1.5rem)",
           }}
         >

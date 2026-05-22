@@ -125,8 +125,7 @@ const FeaturedProjects = ({ projects }) => {
         {/* ── Side cards — 3 per row, landscape, rounded ── */}
         {rest.length > 0 && (
           <div
-            className={`grid gap-5 sr sr-up sr-d2 ${secInView ? "sr-visible" : ""}`}
-            style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
+            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sr sr-up sr-d2 ${secInView ? "sr-visible" : ""}`}
           >
             {rest.slice(0, 3).map((p, i) => (
               <Link

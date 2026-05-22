@@ -1,7 +1,7 @@
 // src/components/collections/CollectionCard.jsx
 import { useNavigate } from "react-router-dom";
 
-const FALLBACK =
+const FALLBACK = "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=1200&auto=compress&cs=tinysrgb&fit=crop&q=80";
   "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?w=800&q=80";
 
 const TYPE_LABEL = {

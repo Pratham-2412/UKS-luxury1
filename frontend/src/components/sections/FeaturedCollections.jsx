@@ -154,10 +154,8 @@ const FeaturedCollections = ({ collections }) => {
 
         {/* Grid — 3 per row landscape cards */}
         <div
-          className="mt-14"
+          className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
             gap: "clamp(1rem,2vw,1.75rem)",
           }}
         >

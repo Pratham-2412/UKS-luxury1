@@ -7,8 +7,7 @@ import CollectionCard from "../../components/collections/CollectionCard";
 import CollectionGallery from "../../components/collections/CollectionGallery";
 import { RiArrowRightLine } from "react-icons/ri";
 
-const FALLBACK_IMG =
-  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=80";
+const FALLBACK_IMG = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=80";
 
 /* ── Scroll reveal hook ── */
 const useSR = (threshold = 0.01) => {
@@ -433,7 +432,7 @@ const CollectionDetail = () => {
         {/* ── Hero ── */}
         <section className="relative aspect-[16/7] min-h-[320px] sm:min-h-[420px] overflow-hidden">
           <img
-            className="w-full h-full object-cover brightness-50"
+            className="w-full h-full object-cover brightness-90"
             src={collection.bannerImage || collection.thumbnail || collection.image || FALLBACK_IMG}
             alt={collection.title}
             onError={(e) => (e.currentTarget.src = FALLBACK_IMG)}

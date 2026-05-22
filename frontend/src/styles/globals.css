@@ -44,6 +44,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-grayscale: grayscale;
+    overflow-x: hidden;
   }
 
   body {
@@ -53,6 +54,12 @@
     font-weight: 300;
     line-height: 1.6;
     overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
   ::-webkit-scrollbar { width: 4px; }
@@ -156,8 +163,8 @@
   }
   .sr-up    { transform: translateY(28px); }
   .sr-down  { transform: translateY(-20px); }
-  .sr-left  { transform: translateX(32px); }
-  .sr-right { transform: translateX(-32px); }
+  .sr-left  { transform: translateX(20px); }
+  .sr-right { transform: translateX(-20px); }
   .sr-scale { transform: scale(0.90); }
   .sr-visible { opacity: 1 !important; transform: none !important; }
 

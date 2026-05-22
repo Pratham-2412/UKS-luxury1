@@ -143,7 +143,7 @@ const Collections = () => {
           <img
             src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1600&q=80"
             alt="Our Collections"
-            className="w-full h-full object-cover brightness-50"
+            className="w-full h-full object-cover brightness-90"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-transparent" />
           

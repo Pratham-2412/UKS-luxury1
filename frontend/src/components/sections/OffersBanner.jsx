@@ -43,8 +43,7 @@ const OffersBanner = ({ offers }) => {
 
           {/* Image — 55% width, full bleed */}
           <div
-            className="relative overflow-hidden flex-shrink-0"
-            style={{ width: "100%", flex: "0 0 55%" }}
+            className="relative overflow-hidden flex-shrink-0 w-full lg:w-[55%] lg:flex-[0_0_55%]"
             onMouseEnter={() => setImgHov(true)}
             onMouseLeave={() => setImgHov(false)}
           >

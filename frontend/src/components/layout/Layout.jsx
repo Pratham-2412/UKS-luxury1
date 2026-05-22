@@ -22,7 +22,7 @@ const Layout = () => {
   }, [pathname, settings]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a0a0a]">
+    <div className="min-h-screen flex flex-col bg-[#0a0a0a] overflow-x-hidden">
       <Navbar />
       <main className="flex-1 page-enter">
         <Outlet />
