@@ -97,7 +97,7 @@ const FeaturedProjects = ({ projects }) => {
                     <h3 className="font-serif font-light text-white leading-[1.12]" style={{ fontSize: "clamp(1.6rem,3.5vw,2.6rem)" }}>
                       {main.title}
                     </h3>
-                    <p className="font-sans font-light leading-[1.75] text-white/65 line-clamp-2" style={{ fontSize: "0.88rem" }}>
+                    <p className="font-sans font-normal leading-[1.75] text-white/78 line-clamp-2" style={{ fontSize: "0.95rem" }}>
                       {main.shortDescription}
                     </p>
                     {main.location && (
@@ -174,8 +174,8 @@ const FeaturedProjects = ({ projects }) => {
                     )}
                   </div>
                   <h4
-                    className="font-serif font-normal leading-[1.25] transition-colors duration-300"
-                    style={{ fontSize: "1.05rem", color: sideHov === i ? "#c4a064" : "#f0ece4" }}
+                    className="font-serif font-medium leading-[1.25] transition-colors duration-300"
+                    style={{ fontSize: "1.25rem", color: sideHov === i ? "#c4a064" : "#f0ece4", fontWeight: 500 }}
                   >
                     {p.title}
                   </h4>

@@ -209,7 +209,7 @@ const Hero = () => {
 
                 {/* H1 line 1 */}
                 <div className="hero-line-2 overflow-hidden">
-                  <h1 className="hero-title-shadow font-serif font-light leading-[0.9] text-white" style={{ fontSize: "clamp(4.2rem,10vw,9.5rem)" }}>
+                  <h1 className="hero-title-shadow font-serif font-light leading-[0.9] text-white" style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}>
                     {slide.heading[0]}
                   </h1>
                 </div>
@@ -217,7 +217,7 @@ const Hero = () => {
                 {/* H1 line 2 */}
                 {slide.heading[1] && (
                   <div className="hero-line-3 mb-9 overflow-hidden">
-                    <h1 className="hero-title-shadow font-serif font-light italic leading-[0.95]" style={{ fontSize: "clamp(4.2rem,10vw,9.5rem)", color: "#e8d5a3" }}>
+                    <h1 className="hero-title-shadow font-serif font-light italic leading-[0.95]" style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)", color: "#e8d5a3" }}>
                       {slide.heading[1]}
                     </h1>
                   </div>

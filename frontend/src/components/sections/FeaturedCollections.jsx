@@ -96,15 +96,15 @@ const CollectionCard = ({ item, index }) => {
       {/* Body */}
       <div className="flex flex-col gap-1.5 pt-4">
         <h3
-          className="font-serif font-normal transition-colors duration-300"
-          style={{ fontSize: "1.05rem", color: hovered ? "#c4a064" : "#f0ece4" }}
+          className="font-serif font-medium transition-colors duration-300"
+          style={{ fontSize: "1.25rem", color: hovered ? "#c4a064" : "#f0ece4", fontWeight: 500 }}
         >
           {item.title}
         </h3>
         {item.shortDescription && (
           <p
-            className="font-sans font-light leading-[1.65] line-clamp-2 transition-colors duration-300"
-            style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.45)" }}
+            className="font-sans font-normal leading-[1.65] line-clamp-2 transition-colors duration-300"
+            style={{ fontSize: "0.92rem", color: "rgba(255,255,255,0.68)" }}
           >
             {item.shortDescription}
           </p>

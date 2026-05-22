@@ -69,16 +69,16 @@ const PillarCard = ({ pillar, index, allInView }) => {
 
       {/* Title */}
       <h4
-        className="font-serif font-normal transition-colors duration-300"
-        style={{ fontSize: "1.2rem", color: hov ? "#f5efe5" : "#f0ece4", lineHeight: 1.3 }}
+        className="font-serif font-medium transition-colors duration-300"
+        style={{ fontSize: "1.25rem", color: hov ? "#f5efe5" : "#f0ece4", lineHeight: 1.3, fontWeight: 500 }}
       >
         {pillar.title}
       </h4>
 
       {/* Desc */}
       <p
-        className="font-sans font-light leading-[1.8] transition-colors duration-300"
-        style={{ fontSize: "0.9rem", color: hov ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.42)" }}
+        className="font-sans font-normal leading-[1.8] transition-colors duration-300"
+        style={{ fontSize: "0.92rem", color: hov ? "rgba(255,255,255,0.68)" : "rgba(255,255,255,0.55)" }}
       >
         {pillar.desc}
       </p>
