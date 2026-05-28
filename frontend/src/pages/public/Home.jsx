@@ -33,7 +33,7 @@ const Home = () => {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    getAllCollections({ featured: true, limit: 6 })
+    getAllCollections({ status: "active", limit: 6 })
       .then((r) => setCollections(extract(r, ["collections", "data.collections", "data", "items"])))
       .catch(() => setCollections([]));
 
